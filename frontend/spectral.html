@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Spectral Explorer · Utopia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+    <link rel="stylesheet" href="css/style.css?v=8" />
+  </head>
+  <body>
+    <canvas id="stars"></canvas>
+    <header class="nav">
+      <a class="logo" href="index.html"
+        ><svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="utGold" gradientUnits="userSpaceOnUse" x1="4" y1="8" x2="44" y2="40"><stop offset="0" stop-color="#fbeab8"/><stop offset=".5" stop-color="#d4af6f"/><stop offset="1" stop-color="#8f6b2e"/></linearGradient></defs><g transform="rotate(-24 24 24)" fill="none" stroke="url(#utGold)" stroke-linecap="round"><path d="M3.5 24A20.5 6.5 0 0 1 44.5 24" stroke-width="2" opacity=".6"/><circle cx="24" cy="24" r="10.5" fill="url(#utGold)" stroke="none"/><path d="M16 21.5q8 -2.5 16 0M15.4 26q8.6 2.6 17.2 0" stroke="#7a5a26" stroke-width="1" opacity=".35"/><path d="M3.5 24A20.5 6.5 0 0 0 44.5 24" stroke-width="2.4"/></g></svg>Utopia</a
+      >
+      <nav class="links">
+        <a href="index.html">Home</a><a href="explorer.html">Sky Explorer</a
+        ><a href="time-machine.html">Time Machine</a
+        ><a href="spectral.html" class="active">Spectral Explorer</a
+        ><a href="discoveries.html">Discoveries</a>
+      </nav>
+    </header>
+    <main>
+      <div class="page">
+        <h1>Spectral Explorer</h1>
+        <p class="sub">
+          Live 0.75–5 µm spectrum of any patch of sky.
+        </p>
+        <div class="layout spx-layout">
+          <!-- ===== Sidebar ===== -->
+          <aside class="panel spx-side">
+            <div class="spx-side-body">
+              <details class="tm-sec" open>
+                <summary>Target</summary>
+                <div class="spx-chips" id="spx-chips"></div>
+                <label for="name">Object name</label>
+                <input id="name" placeholder="e.g. Barnard's Star, then Enter" autocomplete="off" />
+                <div class="spx-row">
+                  <div><label for="ra">RA (°)</label><input id="ra" type="number" step="any" /></div>
+                  <div><label for="dec">Dec (°)</label><input id="dec" type="number" step="any" /></div>
+                </div>
+              </details>
+
+              <details class="tm-sec" open>
+                <summary>Time range</summary>
+                <div class="spx-row one">
+                  <div><label for="tfrom">From</label><select id="tfrom" title="Start of the time window (SPHEREx launched 11 Mar 2025)"></select></div>
+                  <div><label for="tto">To</label><select id="tto" title="End of the time window"></select></div>
+                </div>
+                <p class="spx-note" id="t-note">Defaults to launch → latest data.</p>
+              </details>
+
+              <details class="tm-sec" open>
+                <summary>Detectors <span class="spx-mini"><button type="button" id="dets-all">All</button><button type="button" id="dets-none">None</button></span></summary>
+                <div class="spx-dets" id="spx-dets"></div>
+              </details>
+
+              <details class="tm-sec">
+                <summary>Photometry</summary>
+                <div class="spx-row">
+                  <div><label for="aper">Aperture (″)</label><input id="aper" type="number" step="any" value="12" min="4" /></div>
+                  <div><label for="size">Cutout (arcmin)</label><input id="size" type="number" step="any" value="2.5" min="1" /></div>
+                </div>
+                <label for="maxn">Max images per detector</label>
+                <input id="maxn" type="number" value="0" min="0" />
+                <p class="spx-note">0 = use all images.</p>
+              </details>
+
+              <details class="tm-sec" id="pm-box">
+                <summary>Moving target</summary>
+                <div class="spx-row">
+                  <div><label for="pmra">μα* (mas/yr)</label><input id="pmra" type="number" step="any" value="0" /></div>
+                  <div><label for="pmdec">μδ (mas/yr)</label><input id="pmdec" type="number" step="any" value="0" /></div>
+                </div>
+                <label for="epoch">Epoch (year)</label>
+                <input id="epoch" type="number" step="any" value="2000" />
+                <p class="spx-note">The aperture follows the target’s motion.</p>
+              </details>
+
+              <details class="tm-sec">
+                <summary>Data release</summary>
+                <select id="rel"><option value="">All current releases</option></select>
+                <p class="spx-note">New releases appear automatically.</p>
+              </details>
+            </div>
+            <div class="spx-foot">
+              <button class="btn" id="run" type="button">Build spectrum</button>
+              <button class="btn secondary" id="cancel" type="button" hidden>Cancel</button>
+            </div>
+          </aside>
+
+          <!-- ===== Results ===== -->
+          <div class="spx-main">
+            <div class="panel">
+              <div class="spx-panel-head">
+                <h3>Spectrum</h3>
+                <div class="spx-actions">
+                  <select id="color-by" title="Colour points by">
+                    <option value="det">Colour: detector</option>
+                    <option value="date">Colour: date</option>
+                    <option value="flags">Colour: flags</option>
+                  </select>
+                  <select id="bin" title="Combine points by detector">
+                    <option value="0">No binning</option>
+                    <option value="150">Bin R = 150</option>
+                    <option value="80" selected>Bin R = 80</option>
+                    <option value="40">Bin R = 40</option>
+                  </select>
+                  <select id="yunit" title="Units">
+                    <option value="jy">Fν (Jy)</option>
+                    <option value="mjy">Fν (mJy)</option>
+                    <option value="ujy">Fν (µJy)</option>
+                    <option value="nufnu">νFν (W m⁻²)</option>
+                    <option value="sb">Surface brightness (MJy/sr)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="spx-bar"><div id="bar"></div></div>
+              <div class="spx-status" id="status">Pick a target and press “Build spectrum”.</div>
+              <div id="chart-spec" class="spx-chart"></div>
+              <div class="spx-toggles">
+                <label class="spx-check" title="Connect points with lines"><input type="checkbox" id="joinpts" checked /> Lines</label>
+                <label class="spx-check"><input type="checkbox" id="logx" /> Log λ</label>
+                <label class="spx-check"><input type="checkbox" id="logy" /> Log flux</label>
+                <label class="spx-check" title="Hide points with bad pixels in the aperture (bit 32)"><input type="checkbox" id="hidebad" /> Hide bad pixels</label>
+                <label class="spx-check" title="Show rejected (flagged) points"><input type="checkbox" id="showbad" /> Show rejected</label>
+                <label class="spx-check" title="Show local background level"><input type="checkbox" id="showbkg" /> Background</label>
+              </div>
+            </div>
+
+            <div class="panel" id="inspect" hidden>
+              <div class="spx-panel-head"><h3>Cutout</h3><span class="spx-note" style="margin:0">Click any point to see its image</span></div>
+              <div class="spx-inspect">
+                <div class="spx-stamp">
+                  <img id="inspect-img" alt="SPHEREx cutout of the selected point" />
+                  <svg viewBox="0 0 100 100" aria-hidden="true"><circle id="inspect-ap" cx="50" cy="50" r="10" /></svg>
+                </div>
+                <div>
+                  <div class="spx-note" id="inspect-msg" style="margin-top:0"></div>
+                  <div class="spx-meta" id="inspect-meta"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="spx-panel-head">
+                <h3>Light curve</h3>
+                <div class="spx-actions">
+                  <select id="lc-mode" title="Y axis">
+                    <option value="ratio">Flux ÷ median</option>
+                    <option value="flux">Flux (Jy)</option>
+                  </select>
+                  <div class="spx-range">
+                    <label for="lmin">λ</label><input id="lmin" type="number" step="any" value="0.75" title="λ min (µm)" /><span>–</span><input id="lmax" type="number" step="any" value="5" title="λ max (µm)" /><label>µm</label>
+                  </div>
+                </div>
+              </div>
+              <div id="chart-lc" class="spx-chart" style="height:360px"></div>
+              <p class="spx-note">Each point is divided by the median at its wavelength. Variables rise and fall; movers drop out.</p>
+            </div>
+
+            <details class="panel tm-fold" id="stack-panel">
+              <summary>Combine repeated images</summary>
+              <p class="spx-note">Stack observations of the same detector and bandpass.</p>
+              <div class="spx-row">
+                <div><label for="stack-det">Detector</label><select id="stack-det"><option value="">Build spectrum first</option></select></div>
+                <div><label for="stack-band">Bandpass</label><select id="stack-band" disabled><option value="">Choose detector first</option></select></div>
+              </div>
+              <label for="stack-method">Method</label>
+              <select id="stack-method"><option value="mean">Mean (recommended)</option><option value="median">Median</option><option value="sum">Sum</option></select>
+              <div id="stack-observations" class="stack-list"><span class="spx-note">Build a spectrum to load observations.</span></div>
+              <div class="spx-actions" style="margin-top:12px"><button type="button" id="stack-run" class="btn" disabled>Combine selected</button></div>
+              <div class="spx-status" id="stack-status" aria-live="polite"></div>
+              <div id="stack-result" hidden style="margin-top:12px"><img id="stack-img" alt="Combined SPHEREx image" style="display:block;width:100%;max-width:720px;border:1px solid var(--line);border-radius:8px"/><p class="spx-note" id="stack-caption"></p></div>
+            </details>
+
+            <div class="panel">
+              <div class="spx-panel-head">
+                <h3>Data</h3>
+                <div class="spx-actions">
+                  <button type="button" id="dl-csv">Download CSV</button>
+                  <button type="button" id="share">Copy link</button>
+                </div>
+              </div>
+              <p class="spx-note" id="summary"></p>
+              <details class="tm-more">
+                <summary>How to read this</summary>
+                <p class="spx-note">Aperture photometry with a local background; heavily flagged points are rejected. No aperture correction, so fluxes are lower limits.</p>
+                <p class="spx-note">Flag 0 or 2097152 = nominal. ≥ 4294967296 = bad pixel involved. Be cautious near the D3/D4 dichroic.</p>
+              </details>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+    <script src="js/main.js?v=16"></script>
+    <script src="js/spectral.js?v=7"></script>
+  </body>
+</html>

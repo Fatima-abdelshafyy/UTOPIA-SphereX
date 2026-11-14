@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Discoveries · Utopia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+    <link rel="stylesheet" href="css/style.css?v=13" />
+  </head>
+  <body>
+    <canvas id="stars"></canvas>
+    <header class="nav">
+      <a class="logo" href="index.html"
+        ><svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="utGold" gradientUnits="userSpaceOnUse" x1="4" y1="8" x2="44" y2="40"><stop offset="0" stop-color="#fbeab8"/><stop offset=".5" stop-color="#d4af6f"/><stop offset="1" stop-color="#8f6b2e"/></linearGradient></defs><g transform="rotate(-24 24 24)" fill="none" stroke="url(#utGold)" stroke-linecap="round"><path d="M3.5 24A20.5 6.5 0 0 1 44.5 24" stroke-width="2" opacity=".6"/><circle cx="24" cy="24" r="10.5" fill="url(#utGold)" stroke="none"/><path d="M16 21.5q8 -2.5 16 0M15.4 26q8.6 2.6 17.2 0" stroke="#7a5a26" stroke-width="1" opacity=".35"/><path d="M3.5 24A20.5 6.5 0 0 0 44.5 24" stroke-width="2.4"/></g></svg>Utopia</a
+      >
+      <nav class="links">
+        <a href="index.html">Home</a><a href="explorer.html">Sky Explorer</a
+        ><a href="time-machine.html">Time Machine</a
+        ><a href="spectral.html">Spectral Explorer</a
+        ><a href="discoveries.html" class="active">Discoveries</a>
+      </nav>
+    </header>
+    <main>
+      <div class="page">
+        <h1>Discoveries</h1>
+        <p class="sub">
+          Sources flagged by change detection in Time Machine (brightened,
+          dimmed, variable, appeared, disappeared). Candidates are not
+          confirmed discoveries.
+        </p>
+        <div class="panel">
+          <table>
+            <tr>
+              <th>Object</th>
+              <th>RA (°)</th>
+              <th>Dec (°)</th>
+              <th>Classification / Review</th>
+              <th>Significance</th>
+              <th>Change</th>
+              <th>Epochs · wavelength</th>
+            </tr>
+            <tbody id="discoveries-rows">
+              <tr><td colspan="7">Loading…</td></tr>
+            </tbody>
+          </table>
+          <p class="sub" id="discoveries-note" style="margin:14px 0 0"></p>
+        </div>
+      </div>
+    </main>
+    <script src="js/main.js"></script>
+    <script src="js/discoveries.js"></script>
+  </body>
+</html>

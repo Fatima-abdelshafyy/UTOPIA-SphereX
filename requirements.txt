@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+astropy
+astroquery>=0.4.10
+numpy
+reproject
+pillow
+requests
+
+scipy
+pymongo>=4.6  # optional: only used when MONGODB_URI is set

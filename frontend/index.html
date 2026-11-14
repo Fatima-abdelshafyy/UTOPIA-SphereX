@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Welcome · Utopia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+    <link rel="stylesheet" href="css/style.css?v=14" />
+  </head>
+  <body class="home">
+    <canvas id="stars"></canvas>
+    <header class="nav">
+      <a class="logo" href="index.html"
+        ><svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="utGold" gradientUnits="userSpaceOnUse" x1="4" y1="8" x2="44" y2="40"><stop offset="0" stop-color="#fbeab8"/><stop offset=".5" stop-color="#d4af6f"/><stop offset="1" stop-color="#8f6b2e"/></linearGradient></defs><g transform="rotate(-24 24 24)" fill="none" stroke="url(#utGold)" stroke-linecap="round"><path d="M3.5 24A20.5 6.5 0 0 1 44.5 24" stroke-width="2" opacity=".6"/><circle cx="24" cy="24" r="10.5" fill="url(#utGold)" stroke="none"/><path d="M16 21.5q8 -2.5 16 0M15.4 26q8.6 2.6 17.2 0" stroke="#7a5a26" stroke-width="1" opacity=".35"/><path d="M3.5 24A20.5 6.5 0 0 0 44.5 24" stroke-width="2.4"/></g></svg>Utopia</a
+      >
+      <nav class="links">
+        <a href="index.html" class="active">Home</a
+        ><a href="explorer.html">Sky Explorer</a
+        ><a href="time-machine.html">Time Machine</a
+        ><a href="spectral.html">Spectral Explorer</a
+        ><a href="discoveries.html">Discoveries</a>
+      </nav>
+    </header>
+    <main>
+      <!-- ===== Scroll-driven launch: the rocket rises, the hero fades ===== -->
+      <section class="launch" id="launch">
+        <div class="launch-stage">
+          <div class="hero-layer" id="hero-layer">
+            <section class="hero">
+        <div>
+          <h1>Welcome to <span>Utopia</span></h1>
+          <p>
+            Explore real infrared data from NASA’s SPHEREx mission and watch the
+            sky change over time.
+          </p>
+          <p class="small">Enter a position or an object name to begin.</p>
+          <div class="btns">
+            <a class="btn" href="explorer.html">Explore the sky</a
+            ><a class="link" href="time-machine.html">Try demo</a>
+          </div>
+        </div>
+        <div class="hud">
+          <i class="corner tl"></i><i class="corner tr"></i
+          ><i class="corner bl"></i><i class="corner br"></i>
+          <svg class="ring" viewBox="0 0 400 400" fill="none">
+            <circle
+              class="r1"
+              cx="200"
+              cy="200"
+              r="190"
+              stroke="#c9a46a"
+              stroke-width="2"
+              stroke-dasharray="3 6"
+            />
+            <circle
+              class="r2"
+              cx="200"
+              cy="200"
+              r="170"
+              stroke="#cfcfcf"
+              stroke-width="6"
+              stroke-dasharray="120 700"
+              stroke-linecap="round"
+            />
+            <circle
+              cx="200"
+              cy="200"
+              r="150"
+              stroke="#c9a46a"
+              stroke-width="1"
+              opacity=".5"
+            />
+          </svg>
+          <img src="pngwing.com.png" alt="Floating space object" class="rock" />
+          <svg class="wave" viewBox="0 0 200 20" fill="none">
+            <path
+              d="M0 10Q12 0 25 10T50 10T75 10T100 10T125 10T150 10T175 10T200 10"
+              stroke="#d44"
+              stroke-width="2"
+            />
+            <path
+              d="M0 10Q12 20 25 10T50 10T75 10T100 10T125 10T150 10T175 10T200 10"
+              stroke="#c9a46a"
+              stroke-width="2"
+            />
+          </svg>
+          <div class="galaxy">
+            <div class="tag">Explore the<br />universe</div>
+            <div class="g"></div>
+          </div>
+        </div>
+      </section>
+          </div>
+          <div class="launch-msg" id="launch-msg" aria-label="Utopia: journey in the sky">Utopia: journey in the sky</div>
+          <div class="rocket" id="rocket" aria-hidden="true">
+            <div class="rocket-trail"></div>
+            <div class="rocket-body">
+              <img src="assets/rocket.png" alt="" />
+              <div class="flame"><i></i><i></i><i></i></div>
+              <div class="puffs"><b></b><b></b><b></b><b></b><b></b><b></b></div>
+            </div>
+          </div>
+          <div class="scroll-hint" id="scroll-hint"><span></span>Scroll to launch</div>
+        </div>
+      </section>
+
+      <!-- ===== Fun facts ===== -->
+      <section class="facts" id="facts">
+        <div class="wrap">
+          <p class="eyebrow reveal">Did you know?</p>
+          <h2 class="reveal">Our project, in a few surprising facts</h2>
+
+          <div class="stats">
+            <div class="stat reveal"><b data-count="102">0</b><span>colors of infrared light</span></div>
+            <div class="stat reveal" style="--d:.08s"><b data-count="4">0</b><span>all-sky maps in ~2 years</span></div>
+            <div class="stat reveal" style="--d:.16s"><b data-count="3600" data-plus="~">0</b><span>images every day</span></div>
+            <div class="stat reveal" style="--d:.24s"><b data-count="6">0</b><span>detectors per exposure</span></div>
+          </div>
+
+          <div class="showcase reveal">
+            <div class="art">
+              <svg class="orbit" viewBox="0 0 300 300" fill="none"><circle class="o1" cx="150" cy="150" r="140" stroke="#c9a46a" stroke-width="1.5" stroke-dasharray="3 7"/><circle class="o2" cx="150" cy="150" r="110" stroke="#5ad1e6" stroke-width="1" stroke-dasharray="40 120" stroke-linecap="round"/></svg>
+              <img class="float-a" src="assets/probe.png" alt="Spacecraft illustration" loading="lazy" />
+            </div>
+            <div class="copy">
+              <h3>Launched 11 March 2025</h3>
+              <ul>
+                <li>SPHEREx circles Earth over the poles about <b>14½ times a day</b>.</li>
+                <li>It turns to aim with <b>reaction wheels</b>, not thrusters.</li>
+                <li>After six months it has seen <b>every direction</b> in the sky.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="showcase flip reveal">
+            <div class="art">
+              <svg class="orbit" viewBox="0 0 300 300" fill="none"><circle class="o2" cx="150" cy="150" r="140" stroke="#8b6fd6" stroke-width="1.5" stroke-dasharray="3 7"/><circle class="o1" cx="150" cy="150" r="112" stroke="#c9a46a" stroke-width="1" stroke-dasharray="30 130" stroke-linecap="round"/></svg>
+              <img class="float-b" src="assets/orion.png" alt="Spacecraft illustration" loading="lazy" />
+            </div>
+            <div class="copy">
+              <h3>A spectrum in every pixel</h3>
+              <ul>
+                <li>Light is split into <b>102 colors</b> from 0.75 to 5&nbsp;µm.</li>
+                <li>Hundreds of millions of galaxies get a <b>3D position</b>.</li>
+                <li>Over <b>9 million</b> planned looks at Milky Way clouds hunt for water ice.</li>
+              </ul>
+              <div class="spectrum" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <p class="eyebrow reveal">What Utopia does with it</p>
+          <div class="tools">
+            <a class="tool reveal" href="explorer.html"><i>◎</i><b>Sky Explorer</b><span>Find every image of a position.</span></a>
+            <a class="tool reveal" href="time-machine.html" style="--d:.08s"><i>◷</i><b>Time Machine</b><span>Step through time, spot what changed.</span></a>
+            <a class="tool reveal" href="spectral.html" style="--d:.16s"><i>∿</i><b>Spectral Explorer</b><span>Build a 0.75–5&nbsp;µm spectrum.</span></a>
+            <a class="tool reveal" href="discoveries.html" style="--d:.24s"><i>✦</i><b>Discoveries</b><span>Review moving-object candidates.</span></a>
+          </div>
+          <p class="credit">Mission facts: NASA/JPL-Caltech SPHEREx.</p>
+        </div>
+      </section>
+      <div class="powered">Data from<b>NASA SPHEREx</b></div>
+    </main>
+    <script src="js/main.js"></script>
+    <script src="js/home.js?v=2"></script>
+  </body>
+</html>

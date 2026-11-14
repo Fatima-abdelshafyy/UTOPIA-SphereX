@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sky Explorer · Utopia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+    <link rel="stylesheet" href="css/style.css?v=12" />
+</head>
+
+<body class="sky-page">
+  <div id="aladin-lite-div" class="sky-map"></div>
+  <canvas id="stars"></canvas>
+  <header class="nav">
+    <a class="logo" href="index.html"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="utGold" gradientUnits="userSpaceOnUse" x1="4" y1="8" x2="44" y2="40"><stop offset="0" stop-color="#fbeab8"/><stop offset=".5" stop-color="#d4af6f"/><stop offset="1" stop-color="#8f6b2e"/></linearGradient></defs><g transform="rotate(-24 24 24)" fill="none" stroke="url(#utGold)" stroke-linecap="round"><path d="M3.5 24A20.5 6.5 0 0 1 44.5 24" stroke-width="2" opacity=".6"/><circle cx="24" cy="24" r="10.5" fill="url(#utGold)" stroke="none"/><path d="M16 21.5q8 -2.5 16 0M15.4 26q8.6 2.6 17.2 0" stroke="#7a5a26" stroke-width="1" opacity=".35"/><path d="M3.5 24A20.5 6.5 0 0 0 44.5 24" stroke-width="2.4"/></g></svg>Utopia</a>
+    <nav class="links">
+      <a href="index.html">Home</a><a href="explorer.html" class="active">Sky Explorer</a><a
+        href="time-machine.html">Time Machine</a><a href="spectral.html">Spectral Explorer</a><a
+        href="discoveries.html">Discoveries</a>
+    </nav>
+  </header>
+  <main>
+    <div class="page">
+      <h1>Sky Explorer</h1>
+      <div class="layout">
+        <!-- Compact search pop-up (bottom-left) -->
+        <section class="panel sky-pop" id="sky-pop" aria-label="Sky search">
+          <div class="pop-head">
+            <h3>Search the sky</h3>
+            <button class="icon-btn" id="pop-toggle" type="button" aria-label="Minimise search" aria-expanded="true">&minus;</button>
+          </div>
+          <div class="pop-body">
+            <div class="sky-targets">
+              <button class="chip" data-name="Barnard’s Star" data-ra="269.452" data-dec="4.693">Barnard’s Star</button>
+              <button class="chip" data-name="Epsilon Indi B" data-ra="330.84" data-dec="-56.79">Epsilon Indi B</button>
+              <button class="chip" data-name="WISE 0855-0714" data-ra="133.79" data-dec="-7.25">WISE 0855</button>
+              <button class="chip" data-name="RW Aurigae" data-ra="76.96" data-dec="30.40">RW Aurigae</button>
+              <button class="chip" data-name="R Draconis" data-ra="248.18" data-dec="66.75">R Draconis</button>
+            </div>
+            <input id="name" placeholder="Object name" aria-label="Object name" />
+            <div class="pop-row">
+              <div><label for="ra">RA (°)</label><input id="ra" type="number" step="any" value="133.79" /></div>
+              <div><label for="dec">Dec (°)</label><input id="dec" type="number" step="any" value="-7.25" /></div>
+            </div>
+            <div class="pop-row">
+              <div><label for="fov">FoV (arcmin)</label><input id="fov" type="number" step="any" value="5" /></div>
+              <div><label for="band">Detector</label><select id="band">
+                <option value="">All</option>
+                <option value="1">D1 · 0.75–1.09 µm</option>
+                <option value="2">D2 · 1.09–1.62 µm</option>
+                <option value="3">D3 · 1.62–2.42 µm</option>
+                <option value="4">D4 · 2.42–3.82 µm</option>
+                <option value="5">D5 · 3.82–4.42 µm</option>
+                <option value="6">D6 · 4.42–5.00 µm</option>
+              </select></div>
+            </div>
+            <label for="sky-layer">Sky layer</label>
+            <select id="sky-layer">
+              <option value="spherex" selected>SPHEREx all-sky (102 bands)</option>
+              <option value="wise">Infrared (WISE)</option>
+              <option value="dss">Visible (DSS2)</option>
+              <option value="2mass">Near-infrared (2MASS)</option>
+            </select>
+            <label class="pop-check"><input id="gaia-overlay" type="checkbox" /> Gaia DR3 stars</label>
+            <div class="pop-actions">
+              <button class="btn" id="search-btn" type="button">Search</button>
+              <button class="btn ghost" id="allsky-btn" type="button">All-sky</button>
+            </div>
+          </div>
+        </section>
+        <!-- Results card (bottom-right): hidden until there is something to show, closable -->
+        <aside class="panel viewer" id="result" hidden aria-live="polite">
+          <button class="icon-btn result-close" id="result-close" type="button" aria-label="Close results">&times;</button>
+          <div id="result-body"></div>
+        </aside>
+      </div>
+    </div>
+  </main>
+  <script src="js/aladin.js?v=4" charset="utf-8"></script>
+  <script src="js/main.js?v=14"></script>
+</body>
+
+</html>

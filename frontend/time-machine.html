@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Time Machine · Utopia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+    <link rel="stylesheet" href="css/style.css?v=13" />
+</head>
+<body>
+  <canvas id="stars"></canvas>
+  <header class="nav">
+    <a class="logo" href="index.html"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="utGold" gradientUnits="userSpaceOnUse" x1="4" y1="8" x2="44" y2="40"><stop offset="0" stop-color="#fbeab8"/><stop offset=".5" stop-color="#d4af6f"/><stop offset="1" stop-color="#8f6b2e"/></linearGradient></defs><g transform="rotate(-24 24 24)" fill="none" stroke="url(#utGold)" stroke-linecap="round"><path d="M3.5 24A20.5 6.5 0 0 1 44.5 24" stroke-width="2" opacity=".6"/><circle cx="24" cy="24" r="10.5" fill="url(#utGold)" stroke="none"/><path d="M16 21.5q8 -2.5 16 0M15.4 26q8.6 2.6 17.2 0" stroke="#7a5a26" stroke-width="1" opacity=".35"/><path d="M3.5 24A20.5 6.5 0 0 0 44.5 24" stroke-width="2.4"/></g></svg>Utopia</a>
+    <nav class="links"><a href="index.html">Home</a><a href="explorer.html">Sky Explorer</a><a href="time-machine.html" class="active">Time Machine</a><a href="spectral.html">Spectral Explorer</a><a href="discoveries.html">Discoveries</a></nav>
+  </header>
+  <main><div class="page">
+    <h1>Time Machine</h1>
+    <p class="sub">Step through SPHEREx observations of one sky position and compare them.</p>
+    <div class="layout tm-layout">
+      <!-- ===== Sidebar: what to look at ===== -->
+      <aside class="panel tm-side">
+        <details class="tm-sec" open>
+          <summary>Target</summary>
+          <label for="tm-name">Object name</label><input id="tm-name" placeholder="optional, e.g. RW Aurigae" />
+          <div class="spx-row"><div><label for="tm-ra">RA (°)</label><input id="tm-ra" type="number" step="any" value="76.9565" /></div><div><label for="tm-dec">Dec (°)</label><input id="tm-dec" type="number" step="any" value="30.4014" /></div></div>
+          <label for="tm-fov">Field of view (arcmin)</label><input id="tm-fov" type="number" min="1" max="30" step="any" value="5" />
+        </details>
+        <details class="tm-sec" open>
+          <summary>Data</summary>
+          <label for="tm-det">Detector</label><select id="tm-det"><option value="1">D1 · 0.75–1.09 µm</option><option value="2">D2 · 1.09–1.62 µm</option><option value="3">D3 · 1.62–2.42 µm</option><option value="4">D4 · 2.42–3.82 µm</option><option value="5">D5 · 3.82–4.42 µm</option><option value="6">D6 · 4.42–5.00 µm</option></select>
+          <div class="tm-dates"><label for="tm-from">From</label><select id="tm-from" title="Start of the time window (SPHEREx launched 11 Mar 2025)"></select><label for="tm-to">To</label><select id="tm-to" title="End of the time window"></select></div>
+        </details>
+        <button class="btn" id="tm-search" type="button">Load observations</button>
+        <p class="spx-note" id="tm-status">Pick a target, then load.</p>
+      </aside>
+
+      <section class="spx-main">
+        <!-- ===== Viewer + playback ===== -->
+        <div class="panel">
+          <div class="spx-panel-head"><h3>Observation</h3><div class="tm-head-r"><span class="chip" id="tm-det-label">D1</span><button class="icon-btn" id="tm-share" type="button" title="Copy coordinate link" aria-label="Copy coordinate link">&#128279;</button></div></div>
+          <div class="viewer" id="tm-main-image" style="min-height:300px">Load observations to view an image.</div>
+          <div class="tm-player">
+            <div class="tm-player-btns"><button id="tm-play" type="button">Play</button><button id="tm-stop" type="button">Stop</button></div>
+            <input id="tm-slider" type="range" min="0" max="0" value="0" aria-label="Observation" />
+          </div>
+          <p class="spx-note" id="tm-current">No observation selected.</p>
+        </div>
+
+        <!-- ===== Compare ===== -->
+        <div class="panel">
+          <div class="spx-panel-head"><h3>Compare</h3></div>
+          <div class="tm-compare-bar">
+            <div><label for="tm-a">Observation A</label><select id="tm-a"></select></div>
+            <div><label for="tm-b">Observation B</label><select id="tm-b"></select></div>
+            <div class="tm-seg"><button id="tm-diff" type="button">B − A</button><button id="tm-combine" type="button">A + B</button><button id="tm-first-last" type="button" title="Select the first and last observation and subtract them">First → last</button></div>
+          </div>
+          <details class="tm-more">
+            <summary>Display options</summary>
+            <div class="spx-row tm-opts">
+              <div><label for="tm-combine-method">Combine</label><select id="tm-combine-method"><option value="mean">Mean</option><option value="median">Median</option><option value="sum">Sum</option></select></div>
+              <div><label for="tm-stretch">Stretch</label><select id="tm-stretch"><option value="asinh">Asinh</option><option value="sqrt">Square root</option><option value="log">Log</option><option value="linear">Linear</option></select></div>
+              <div><label for="tm-contrast">Contrast</label><input id="tm-contrast" type="range" min="0.5" max="2.5" step="0.1" value="1"></div>
+              <div><label for="tm-zoom">Zoom</label><input id="tm-zoom" type="range" min="1" max="5" step="0.25" value="1"></div>
+            </div>
+          </details>
+          <div class="tm-comparison">
+            <div><p class="spx-note">A</p><div class="viewer" id="tm-image-a" style="min-height:170px">A</div></div>
+            <div><p class="spx-note">B</p><div class="viewer" id="tm-image-b" style="min-height:170px">B</div></div>
+            <div><p class="spx-note">Result</p><div class="viewer" id="tm-result" style="min-height:170px">B − A or A + B</div></div>
+          </div>
+          <p class="spx-note">Same detector and band only. Images are WCS-aligned first.</p>
+        </div>
+
+        <!-- ===== Change detection ===== -->
+        <div class="panel" id="tm-chg">
+          <div class="spx-panel-head"><h3>Change detection</h3><span class="chip" title="SPHEREx sees a different wavelength every visit">same-wavelength comparison</span></div>
+          <p class="spx-note" style="margin-top:0">Finds sources that brightened, dimmed, vary, appeared or disappeared across all loaded observations. Only images at (almost) the same wavelength are compared, because a brightness difference between two wavelengths is just the object&rsquo;s spectrum.</p>
+          <div class="spx-row tm-chg-opts">
+            <div><label for="tm-chg-sens">Sensitivity</label><select id="tm-chg-sens"><option value="3">High &middot; more detections, more false alarms</option><option value="4" selected>Balanced</option><option value="5">Strict &middot; only very clear changes</option></select></div>
+            <div><label for="tm-chg-wl">Wavelength match</label><select id="tm-chg-wl"><option value="0.005">Very close (0.5 %)</option><option value="0.015" selected>Normal (1.5 %)</option><option value="0.03">Loose (3 %)</option></select></div>
+          </div>
+          <div class="tm-chg-checks">
+            <label class="spx-check" title="Ignores bad / flagged pixels (cosmic rays, hot pixels, &hellip;) that can fake a change."><input type="checkbox" id="tm-chg-mask" checked> Ignore flagged pixels</label>
+            <label class="spx-check" title="Uses bright, stable stars in the field to cancel brightness differences between images."><input type="checkbox" id="tm-chg-norm" checked> Correct image-to-image brightness</label>
+            <label class="spx-check" title="Also compare images with no readable wavelength, grouped by band. Less reliable."><input type="checkbox" id="tm-chg-prov"> Include provisional groups</label>
+            <label class="spx-check"><input type="checkbox" id="tm-chg-stable"> Show stable sources</label>
+          </div>
+          <div class="tm-toolbar">
+            <button class="btn" id="tm-chg-run" type="button">Detect changes</button>
+            <button class="btn secondary" id="tm-chg-stop" type="button" hidden>Stop</button>
+            <button class="btn secondary" id="tm-chg-export" type="button" disabled>Export CSV</button>
+            <button class="btn secondary" id="tm-chg-save" type="button" disabled>Add to Discoveries</button>
+          </div>
+          <div class="spx-bar" id="tm-chg-bar" hidden><div></div></div>
+          <p class="spx-note" id="tm-chg-status">Load observations, then press &ldquo;Detect changes&rdquo;. It analyses every observation in the list above.</p>
+          <div class="tm-chg-table" id="tm-chg-table"></div>
+          <canvas id="tm-lightcurve" hidden aria-label="Light curve of the selected source"></canvas>
+          <p class="spx-note" id="tm-lc-note" hidden>Click a point to open that observation above.</p>
+        </div>
+
+        <!-- ===== Metadata (collapsed) ===== -->
+        <details class="panel tm-fold">
+          <summary>Observation details</summary>
+          <div id="tm-metadata" class="spx-meta">Details appear here.</div>
+        </details>
+      </section>
+    </div>
+  </div></main>
+  <script src="js/main.js?v=16"></script>
+</body>
+</html>
