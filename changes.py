@@ -1,29 +1,4 @@
-"""
-Automatic change detection for SPHEREx cutouts (used by the Time Machine page).
 
-Idea
-----
-1. Detect sources in every observation (5-sigma peaks above a local background).
-2. Merge the detections into one list of sky positions.
-3. Measure the surface brightness at every position in every observation
-   (small aperture, background ring, errors from the VARIANCE plane).
-4. Compare ONLY observations taken at (almost) the same wavelength, because
-   SPHEREx observes a different wavelength each time and a brightness change
-   between two different wavelengths is just the object's spectrum.
-5. Label each source: brightened, dimmed, variable, appeared, disappeared,
-   or stable, with a significance (z-score) so the user can judge it.
-
-Pure statistics, no machine learning.
-
-Performance notes
------------------
-* Source detection runs inside the download worker threads, so it overlaps with
-  network time instead of adding to it.
-* Sky -> pixel conversion is done once per image for all candidate positions
-  (one vectorised WCS call) instead of once per measurement.
-* The caller passes the FLAGS bit-mask (same one the image viewer uses), so a
-  catalogued SOURCE pixel is never masked away.
-"""
 
 import math
 from concurrent.futures import ThreadPoolExecutor
@@ -38,13 +13,13 @@ from astropy.wcs import WCS
 from astropy.wcs.utils import proj_plane_pixel_scales
 
 # ---- tunable defaults -------------------------------------------------
-R_AP, R_IN, R_OUT = 2.0, 4.0, 7.0   # aperture / background ring radii (pixels)
+R_AP, R_IN, R_OUT = 2.0, 4.0, 7.0   
 DETECT_NSIGMA = 5.0
 MIN_DETECT_PIX = 2
 MAX_SOURCES_PER_GROUP = 40
-WAVELENGTH_TOL = 0.015              # observations within 1.5 % in wavelength are comparable
-SYSTEMATIC_FLOOR = 0.05             # 5 % calibration/PSF floor added to every error
-MAX_TOTAL_PIXELS = 80_000_000       # protects memory for huge cutouts
+WAVELENGTH_TOL = 0.015              
+SYSTEMATIC_FLOOR = 0.05           
+MAX_TOTAL_PIXELS = 80_000_000       
 
 
 class Cancelled(Exception):
